@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<title>หน้าแรก</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+<!-- ฟอนต์ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Itim&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Square+Peg&display=swap" rel="stylesheet">
+
+<style>
+  /* ================= ROOT (ค่าเริ่มต้น: มือถือทั่วไป 360–414px) ================= */
+  :root{
+    /* เฟรมแอปแบบมือถือ */
+    --app-min: 320px;
+    --app-ideal: 390px;
+    --app-max: 414px;
+
+    /* ขนาดตัวอักษร/ระยะห่าง */
+    --content-padding: clamp(18px, 5vw, 28px);
+    --h1-size: clamp(3.5rem, 7vw, 4rem);       /* Thank You */
+    --for-size: clamp(1rem, 3.2vw, 1.2rem);
+    --camp-size: clamp(1.6rem, 5.8vw, 2.4rem);
+    --name-size: clamp(1.4rem, 4.6vw, 2rem);
+    --wish-size: clamp(.9rem, 3.4vw, 1.05rem);
+
+    /* พาธรูป */
+    --sky-bg: url("images/sky_bg.jpg");
+    --grass-bg: url("images/grass_bg.png");
+    --tree: url("images/tree.png");
+    --university: url("images/university.png");
+    --grass: url("images/grass.png");
+
+    /* กล่องขาว (base) */
+    --box-w: min(78%, 360px);
+    --box-top-p1: 36%;
+    --box-top-p2: 38%;
+
+    /* เมฆ (ค่า base) */
+    --cloud1-w: 180px;
+    --cloud1-top: 4%;
+    --cloud1-left: 8%;
+
+    --cloud2-w: 180px;
+    --cloud2-top: 57%;
+    --cloud2-left: 65%;
+
+    /* พื้นหญ้าด้านล่าง */
+    --grass-1-left: 12%;
+    --grass-2-left: 70%;
+    --grass-bg-h: 230px;
+  }
+
+  /* ================= STAGE ================= */
+  html, body{
+    margin: 0;
+    height: 100%;
+    background: linear-gradient(#aee1f9, #ffffff); /* สีพื้นรอบๆ เมื่ออยู่บนจอใหญ่ */
+    font-family: 'Noto Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    color: #000;
+    display: grid;
+    place-items: center;
+  }
+
+  .app{
+    position: relative;
+    width: clamp(var(--app-min), 100vw, var(--app-max)); /* มือถือเต็มจอ, จอใหญ่ล็อกกว้างมือถือ */
+    height: 100dvh;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+
+    background-image: var(--sky-bg);
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+  }
+
+  /* ================= STACK ================= */
+  .stack {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: min(92%, 420px);
+    margin-inline: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    --stack-gap: clamp(10px, 3vh, 24px);
+    gap: var(--stack-gap);
+    z-index: 3; /* อยู่หน้า grass-bg */
+  }
+
+  /* ====== เมฆ (อยู่ใน flow เดินตามเอกสาร ไม่ซ้อน) ====== */
+  .cloud, .cloud2{
+    position: absolute;
+    height: auto;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,.08));
+    opacity: .96;
+    animation: sway 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1; /* อยู่บน university แต่ใต้กล่อง (สลับด้วยลำดับ DOM) */
+  }
+  .cloud {
+    width: var(--cloud1-w);
+    top: var(--cloud1-top);
+    left: var(--cloud1-left);
+  }
+  .cloud2{
+    width: var(--cloud2-w);
+    top: var(--cloud2-top);
+    left: var(--cloud2-left);
+    animation-duration: 10s;
+    animation-delay: 1.6s;
+  }
+
+  @keyframes sway{
+    0%{ transform: translateX(0); }
+    25%{ transform: translateX(10px); }
+    50%{ transform: translateX(0); }
+    75%{ transform: translateX(-10px); }
+    100%{ transform: translateX(0); }
+  }
+
+  /* ====== กล่องสีขาว (คงสไตล์เดิม แต่เป็น flow ไม่ซ้อน) ====== */
+  .white-box{
+    position: relative;
+    width: var(--box-w);
+    background: rgba(255,255,255,.42);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-radius: 18px;
+    color: #000;
+    text-align: center;
+    padding: 20px 22px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    z-index: 4;
+  }
+
+  /* เนื้อหาข้อความในกล่อง */
+  .thank{ font-family:'Square Peg',cursive; font-size: var(--h1-size); color:#fe9433; margin: 0 0 2px; }
+  .for{ font-size: var(--for-size); color:#fe9433; margin: 4px 0; }
+  .camp{ font-size: var(--camp-size); font-weight: 800; color:#fe9433; margin: 2px 0; -webkit-text-stroke:.8px #000; text-shadow: 0 1px 0 rgba(255,255,255,.3); }
+  .Fluke{ font-family:'Itim',cursive; font-size: var(--name-size); color:#fec733; margin: 14px 0 10px; -webkit-text-stroke:.1px #171616; }
+  .wish{ font-family:'Itim',cursive; font-size: var(--wish-size); white-space: pre-line; margin: 0 0 12px; }
+
+  /* ปุ่ม */
+  button{
+    padding: 8px 16px;
+    font: 600 1rem 'Noto Sans', sans-serif;
+    color: #fff; background:#fe9433;
+    border: 0; border-radius: 12px; cursor: pointer;
+    transition: transform .2s ease, background .2s ease;
+  }
+  button:hover{ background:#fec733; transform: translateY(-1px); }
+  button:active{ transform: translateY(0); }
+
+  /* ====== มหาวิทยาลัย (เป็นบล็อกใน flow) ====== */
+  .university{
+    position: absolute; bottom: 62px; right: 0;
+    width: 180px; height: 180px;
+    background-image: var(--university); 
+    background-size: cover; 
+    background-repeat: no-repeat;
+    transform: rotate(2deg);
+    transform-origin: bottom center;
+    z-index: 2;
+
+  }
+
+  /* ====== พื้น/พร็อพ ด้านล่าง (absolute) ====== */
+  .grass-bg{
+    position: absolute; left:0; right:0; bottom:0;
+    height: var(--grass-bg-h);
+    background-image: var(--grass-bg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    z-index: 1; /* ใต้ทุกอย่างใน stack */
+  }
+  .tree{
+    position: absolute; bottom: 90px; left: 0;
+    width: 150px; height: 150px;
+    background-image: var(--tree); background-size: cover; background-repeat: no-repeat;
+    transform: rotate(-3deg);
+    transform-origin: bottom center;
+    z-index: 0;
+  }
+  .grass, .grass2{
+    position: absolute; bottom: 24px;
+    width: 70px; height: 70px;
+    background-image: var(--grass); background-size: cover; background-repeat: no-repeat;
+    filter: brightness(.9);
+    transform-origin: bottom center;
+    animation: sway-grass 2.2s ease-in-out infinite;
+    z-index: 1;
+  }
+  .grass{ left: 12%; }
+  .grass2{ left: 70%; bottom: 36px; animation-delay: 1.4s; }
+
+  @keyframes sway-grass{
+    0%{ transform: rotate(0deg); }
+    25%{ transform: rotate(4deg); }
+    50%{ transform: rotate(0deg); }
+    75%{ transform: rotate(-4deg); }
+    100%{ transform: rotate(0deg); }
+  }
+
+  /* ลด motion */
+  @media (prefers-reduced-motion: reduce){
+    .cloud, .cloud2, .grass, .grass2{ animation: none !important; }
+  }
+
+  /* ================= BREAKPOINTS ================= */
+
+  /* มือถือเล็กมาก (≤340px) */
+  @media (max-width: 340px){
+    :root{
+      --box-w: min(86%, 330px);
+      --grass-bg-h: 210px;
+    }
+    .stack{ width: min(96%, 380px); }
+    .cloud, .cloud2{ max-width: 86%; }
+    .thank{ font-size: clamp(2.2rem, 9vw, 2.6rem); }
+    .camp{  font-size: clamp(1.4rem, 6.4vw, 1.9rem); }
+    .Fluke{ font-size: clamp(1.2rem, 5.4vw, 1.6rem); }
+    .wish{  font-size: clamp(.85rem, 3.4vw, .95rem); }
+    button{ padding: 6px 12px; font-size: .95rem; }
+  }
+
+  /* มือถือทั่วไป (341–400px) */
+  @media (min-width: 341px) and (max-width: 400px){
+    :root{ --box-w: min(78%, 360px); }
+  }
+
+  /* มือถือจอใหญ่ (401–430px) */
+  @media (min-width: 401px) and (max-width: 430px){
+    :root{
+      --box-w: min(72%, 380px);
+      --grass-bg-h: 250px;
+    }
+  }
+
+  /* หน้าจอเตี้ย (≤640px สูง) */
+  @media (max-height: 640px){
+    .stack{ --stack-gap: clamp(6px, 2.2vh, 16px); }
+    .white-box{ padding: 14px 16px; }
+    .thank{ font-size: clamp(2rem, 7.5vw, 2.4rem); }
+    .camp{  font-size: clamp(1.3rem, 5.4vw, 1.8rem); }
+    .Fluke{ font-size: clamp(1.1rem, 4.8vw, 1.5rem); }
+    .wish{  font-size: clamp(.82rem, 2.9vw, .95rem); }
+  }
+
+  /* หน้าจอสูง (≥780px) */
+  @media (min-height: 780px){
+    .stack{ --stack-gap: clamp(14px, 3.6vh, 28px); }
+  }
+
+  /* iPad / เดสก์ท็อป: จำลองมุมมองมือถือกลางจอ */
+  @media (min-width: 600px){
+    .app{ width: var(--app-ideal); max-width: var(--app-max); }
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <!-- กลุ่มที่ “ไม่ซ้อนกัน” เรียงบน→ล่าง: ฟ้า → กล่อง → ขาว → ตึก -->
+    <div class="stack">
+      <div class="white-box" id="card">
+        <h1 class="thank">Thank You</h1>
+        <p class="for">for coming to</p>
+        <p class="camp">Camp</p>
+        <p class="Fluke">พี่ฟลุ๊ค</p>
+        <button id="nextBtn">Next</button>
+      </div>
+    </div>
+
+    <svg class="cloud" viewBox="0 0 350 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="cloudGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#b3e5fc"/>
+          <stop offset="100%" stop-color="#81d4fa"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#cloudGradient1)" stroke="#333" stroke-width="2"
+        d="M60 100 Q40 80 60 60 Q80 30 120 50 Q140 20 180 40 Q220 20 240 50 Q260 60 250 90 Q230 120 180 110 Q140 130 100 120 Q80 120 60 100Z"/>
+    </svg>
+
+    <svg class="cloud2" viewBox="0 0 350 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="cloudGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="100%" stop-color="#e5e6ff"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#cloudGradient2)" stroke="#333" stroke-width="2"
+        d="M60 100 Q40 80 60 60 Q80 30 120 50 Q140 20 180 40 Q220 20 240 50 Q260 60 250 90 Q230 120 180 110 Q140 130 100 120 Q80 120 60 100Z"/>
+    </svg>
+
+    <!-- พื้น/พร็อพ absolute ด้านล่าง -->
+    <div class="grass-bg"></div>
+    <div class="tree"></div>
+    <div class="university" aria-hidden="true"></div>
+    <div class="grass"></div>
+    <div class="grass2"></div>
+  </div>
+
+  <script>
+    // สลับหน้าใน "กล่องสีขาว" โดยไม่ทำให้เลย์เอาต์ซ้อน
+    const card = document.getElementById('card');
+
+    function renderPage(page){
+      if(page === 1){
+        card.innerHTML = `
+          <h1 class="thank">Thank You</h1>
+          <p class="for">for coming to</p>
+          <p class="camp">Camp</p>
+          <p class="Fluke">พี่ฟลุ๊ค</p>
+          <button id="nextBtn">Next</button>
+        `;
+      }else{
+        card.innerHTML = `
+          <div class="wish">
+            🎉ขอบคุณน้องๆทุกคนนะครับที่มาค่ายในครั้งนี้🎉
+
+            เราผ่านทั้งความเหนื่อย สนุก 
+            และความทรงจำดี ๆ มาด้วยกัน ❤️
+
+            อย่าลืมขอบคุณตัวเองที่ก้าวมาถึงจุดนี้ได้ 
+            และภูมิใจในตัวเองนะ
+
+            ขอให้ทุกคนโชคดี มีแรงบันดาลใจ 
+            และพบเจอสิ่งดี ๆ เสมอ ✨
+
+            และฝากชมรม Youth For Next Step 
+            ไว้เป็นที่สำหรับพักใจของเรานะ
+
+            จากพี่ฟลุ๊ค 🤍
+          </div>
+          <button id="backBtn">Back</button>
+        `;
+      }
+      // bind ปุ่มใหม่ทุกครั้งที่เปลี่ยนหน้า
+      const nextBtn = document.getElementById('nextBtn');
+      const backBtn = document.getElementById('backBtn');
+      if(nextBtn) nextBtn.addEventListener('click', () => renderPage(2));
+      if(backBtn) backBtn.addEventListener('click', () => renderPage(1));
+    }
+
+    // หน้าเริ่มต้น
+    renderPage(1);
+  </script>
+</body>
+</html>
